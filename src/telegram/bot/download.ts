@@ -19,9 +19,7 @@ import { evaluatorsFor } from "@/telegram/helpers/text"
 
 export const downloadDp = Dispatcher.child()
 
-downloadDp.onNewMessage(
-  filters.text && filters.chatType(["group", "supergroup", "channel"]),
-  async (msg) => {
+downloadDp.onNewMessage(filters.chat("group") | filters.chat("supergroup"), async (msg) => {
     const { e, t } = await evaluatorsFor(msg.sender)
 
     if (msg.text === "meow") {
