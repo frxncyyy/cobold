@@ -19,7 +19,7 @@ import { evaluatorsFor } from "@/telegram/helpers/text"
 
 export const downloadDp = Dispatcher.child()
 
-downloadDp.onNewMessage(filters.chat("user"), async (msg) => {
+downloadDp.onNewMessage(async (msg) => {
     const { e, t } = await evaluatorsFor(msg.sender)
 
     if (msg.text === "meow") {
