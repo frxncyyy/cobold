@@ -22,28 +22,16 @@ export const downloadDp = Dispatcher.child()
 downloadDp.onNewMessage(async (msg) => {
     const { e, t } = await evaluatorsFor(msg.sender)
 
-    if (msg.text?.trim() === "meow") {
+    if (msg.text === "meow") {
         await msg.replyText("meow :з")
         return
     }
 
     const urlEntity = msg.entities.find(e => e.is("text_link") || e.is("url"))
-    const extractedUrl =
-            urlEntity?.let(e =>
-                e.is("text_link") ? e.params.url : e.text
-            ) ||
-            (/^https?:\/\/\S+$/.test(msg.text?.trim() || "")
-                ? msg.text.trim()
-                : undefined)
-    const req = await createRequest(extractedUrl, msg.sender.id)
-
-    if (!extractedUrl) {
-            // silently ignore non-URL messages
-            return
-        }
+    const extractedUrl = urlEntity && (urlEntity.is("text_link") ? urlEntity.params.url : urlEntity.text)
+    const req = await createRequest(extractedUrl || msg.text, msg.sender.id)
 
     if (!req.success) {
-        await msg.replyText(t("error", { message: e(req.error) }))
         return
     }
 
